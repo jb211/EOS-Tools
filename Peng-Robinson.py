@@ -45,6 +45,7 @@ def solve_Z_factor_root(A,B):
     z_root = fsolve(Z_poly, [0.5])
     return z_root
 
+
 if __name__ == "__main__":
     w_t = 0.228
     t_sc = 304.12
