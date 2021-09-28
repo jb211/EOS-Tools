@@ -54,28 +54,24 @@
 
         <script>
             function createTable(tableData) {
-            var table = document.createElement('table');
-            var tableBody = document.createElement('tbody');
-          
-            tableData.forEach(function(rowData) {
-              var row = document.createElement('tr');
-          
-              rowData.forEach(function(cellData) {
-                var cell = document.createElement('td');
-                cell.appendChild(document.createTextNode(cellData));
-                row.appendChild(cell);
-              });
-          
-              tableBody.appendChild(row);
-            });
+            $('#zFacTable').remove(); 
+            
+            var body = document.getElementsByTagName("body")[0]
+            var tbl  = document.createElement('table');
+            
+            body.appendChild(tbl)
+            tbl.setAttribute("id", "zFacTable")
+            $('#zFacTable').DataTable( {
+               data: tableData,
+               "columns": [
+                { title: 'Pressure (Pa)', data: 'Pressure (Pa)', render: $.fn.dataTable.render.number(',', '.', 1, '') },
+                { title: 'Z-factor', data: 'Z-factor', render: $.fn.dataTable.render.number(',', '.', 4, '') },
+                ]
+            })
 
-            $('#DataTable').remove(); 
-            table.appendChild(tableBody);
-            document.body.appendChild(table);
-            table.setAttribute("id", "DataTable")
-            $('#DataTable').DataTable();
+            
 
-          }
+            }
         </script>
 
         <script type="text/javascript">         
@@ -97,13 +93,20 @@
                     "Temperature": Temperature
                     }),
                     success: function(res){  
-                         data_ret = JSON.parse(res["body"])                       
-                         console.log(data_ret)
+                         try{ 
+                            data_ret = JSON.parse(res["body"])
+                         }
+                         catch(e){
+                            alert("Calculations unsuccessful, please check your input formats") 
+                            return  
+                         }
+                         console.log(data_ret)                  
                          createTable(data_ret)
                          return data_ret
                          ;} ,          
                     error: function(){
                         console.log("whaddup tho");
+                        alert("Calculations unsucessful, please check your input formats")
                     }})})})
         </script>
    
