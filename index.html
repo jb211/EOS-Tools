@@ -57,7 +57,7 @@
                 console.log({Tsc,Psc, Temperature, omega})                
                 $.ajax({                     
                     type: "POST",                     
-                    url: 'https://ghx1pj3i44.execute-api.us-east-1.amazonaws.com/default',      
+                    url: 'https://ghx1pj3i44.execute-api.us-east-1.amazonaws.com/default/calculate_PR_z_factors',      
                     data: JSON.stringify({
                     "Tsc": Tsc,
                     "Psc": Psc,
