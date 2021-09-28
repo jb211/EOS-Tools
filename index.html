@@ -7,6 +7,9 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
 
     <title>EOS Tools</title>
   </head>
@@ -31,15 +34,48 @@
             <label for="Psc">Critical Pressure (Pa)</label>
             <input type="text" class="form-control" id="Tsc" placeholder="101325">
           </div>
+          <div class="form-group">
+            <label for="omega">Component omega</label>
+            <input type="text" class="form-control" id="omega" placeholder="0.223">
+          </div>
+          <div class="form-group">
+            <label for="Temperature">Isotherm Temperature on which to evaluate (K)</label>
+            <input type="text" class="form-control" id="Temperature" placeholder="377">
+          </div>
           <br>
           <br>
-        <button type="submit" class="btn btn-primary">Run EOS stats</button>
+        <button type="submit" class="btn btn-primary" id = "submit-calc">Run EOS stats</button>
+
+        <script type="text/javascript">         
+            $(document).ready(function() {                      
+            $("#submit-calc").click(function(e) {                 
+                e.preventDefault();                          
+                var  Tsc = parseFloat(("#Tsc").val()),                     
+                Psc = parseFloat(("#Psc").val()),                     
+                Temperature = parseFloat(("#Temperature").val()),
+                omega =  parseFloat(("#omega").val())                    
+                $.ajax({                     
+                type: "POST",                     
+                url: 'https://ghx1pj3i44.execute-api.us-east-1.amazonaws.com/default', contentType: 'application/json',      
+                data: JSON.stringify({
+                "Tsc": Tsc,
+                "Psc": Psc,
+                "omega": omega,
+                "Temperature": Temperature
+                }),                     
+            success: function(res){                         
+            $('#form-response').html('<div class="alert alert-info" role="alert">Welcome to the queue! Your path will begin shortly...</div>');},                     
+            error: function(){
+             $('#form-response').html('<div class="alert alert-info" role="alert">Something went wrong... We are working on it!</div>');                     }}); }) });      
+        </script>
+
+
       </form>
 
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
-
+    
 
   </body>
 </html>
