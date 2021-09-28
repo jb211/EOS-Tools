@@ -38,12 +38,16 @@
         </div>
         <div class="form-group">
             <label for="Psc">Critical Pressure (Pa)</label>
-            <input type="text" class="form-control" id="Psc" placeholder="101325">
+            <input type="text" class="form-control" id="Psc" placeholder="7400000">
           </div>
           <div class="form-group">
-            <label for="omega">Component omega</label>
+            <label for="omega">Acentric factor (omega)</label>
             <input type="text" class="form-control" id="omega" placeholder="0.223">
           </div>
+          <div class="form-group">
+                <label for="MW">Molecular Weight (g/mol)</label>
+                <input type="text" class="form-control" id="MW" placeholder="48">
+              </div>
           <div class="form-group">
             <label for="Temperature">Isotherm Temperature on which to evaluate (K)</label>
             <input type="text" class="form-control" id="Temperature" placeholder="377">
@@ -55,7 +59,8 @@
         <script>
             function createTable(tableData) {
             $('#zFacTable').remove(); 
-            
+            $('.zFacTable_length').remove();
+
             var body = document.getElementsByTagName("body")[0]
             var tbl  = document.createElement('table');
             
@@ -65,7 +70,8 @@
                data: tableData,
                "columns": [
                 { title: 'Pressure (Pa)', data: 'Pressure (Pa)', render: $.fn.dataTable.render.number(',', '.', 1, '') },
-                { title: 'Z-factor', data: 'Z-factor', render: $.fn.dataTable.render.number(',', '.', 4, '') },
+                { title: 'Z-factor', data: 'Z-factor', render: $.fn.dataTable.render.number(',', '.', 6, '') },
+                { title: 'Density (g/cm^3)', data: 'Density: (g/cm^3)', render: $.fn.dataTable.render.number(',', '.', 7, '') },
                 ]
             })
 
@@ -81,8 +87,9 @@
                 var  Tsc = parseFloat($("#Tsc" ).val()),                     
                 Psc = parseFloat($("#Psc").val()),                     
                 Temperature = parseFloat($("#Temperature").val()),
-                omega =  parseFloat($("#omega").val())  
-                console.log({Tsc,Psc, Temperature, omega})                
+                omega =  parseFloat($("#omega").val())
+                MW =  parseFloat($("#MW").val())  
+                console.log({Tsc,Psc, Temperature, omega, MW})                
                 $.ajax({                     
                     type: "POST",                     
                     url: 'https://ghx1pj3i44.execute-api.us-east-1.amazonaws.com/default/calculate_PR_z_factors',      
@@ -90,6 +97,7 @@
                     "Tsc": Tsc,
                     "Psc": Psc,
                     "omega": omega,
+                    "MW": MW,
                     "Temperature": Temperature
                     }),
                     success: function(res){  
