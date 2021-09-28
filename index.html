@@ -7,9 +7,15 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    
+    <!-- jquery -->
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     </head>
+
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
 
     <title>EOS Tools</title>
   </head>
@@ -46,6 +52,32 @@
           <br>
         <button type="submit" class="btn btn-primary" id ="submit-calc">Run EOS stats</button>
 
+        <script>
+            function createTable(tableData) {
+            var table = document.createElement('table');
+            var tableBody = document.createElement('tbody');
+          
+            tableData.forEach(function(rowData) {
+              var row = document.createElement('tr');
+          
+              rowData.forEach(function(cellData) {
+                var cell = document.createElement('td');
+                cell.appendChild(document.createTextNode(cellData));
+                row.appendChild(cell);
+              });
+          
+              tableBody.appendChild(row);
+            });
+
+            $('#DataTable').remove(); 
+            table.appendChild(tableBody);
+            document.body.appendChild(table);
+            table.setAttribute("id", "DataTable")
+            $('#DataTable').DataTable();
+
+          }
+        </script>
+
         <script type="text/javascript">         
             $(document).ready(function() {                      
             $("#submit-calc").click(function(e) {                 
@@ -64,12 +96,17 @@
                     "omega": omega,
                     "Temperature": Temperature
                     }),
-                    success: function(res){                         
-                         console.log(res);} ,                 
+                    success: function(res){  
+                         data_ret = JSON.parse(res["body"])                       
+                         console.log(data_ret)
+                         createTable(data_ret)
+                         return data_ret
+                         ;} ,          
                     error: function(){
                         console.log("whaddup tho");
                     }})})})
         </script>
+   
 
 
       </form>
