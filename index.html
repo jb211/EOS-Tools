@@ -32,7 +32,7 @@
         </div>
         <div class="form-group">
             <label for="Psc">Critical Pressure (Pa)</label>
-            <input type="text" class="form-control" id="Tsc" placeholder="101325">
+            <input type="text" class="form-control" id="Psc" placeholder="101325">
           </div>
           <div class="form-group">
             <label for="omega">Component omega</label>
@@ -44,29 +44,31 @@
           </div>
           <br>
           <br>
-        <button type="submit" class="btn btn-primary" id = "submit-calc">Run EOS stats</button>
+        <button type="submit" class="btn btn-primary" id ="submit-calc">Run EOS stats</button>
 
         <script type="text/javascript">         
             $(document).ready(function() {                      
             $("#submit-calc").click(function(e) {                 
                 e.preventDefault();                          
-                var  Tsc = parseFloat(("#Tsc").val()),                     
-                Psc = parseFloat(("#Psc").val()),                     
-                Temperature = parseFloat(("#Temperature").val()),
-                omega =  parseFloat(("#omega").val())                    
+                var  Tsc = parseFloat($("#Tsc" ).val()),                     
+                Psc = parseFloat($("#Psc").val()),                     
+                Temperature = parseFloat($("#Temperature").val()),
+                omega =  parseFloat($("#omega").val())  
+                console.log({Tsc,Psc, Temperature, omega})                
                 $.ajax({                     
-                type: "POST",                     
-                url: 'https://ghx1pj3i44.execute-api.us-east-1.amazonaws.com/default', contentType: 'application/json',      
-                data: JSON.stringify({
-                "Tsc": Tsc,
-                "Psc": Psc,
-                "omega": omega,
-                "Temperature": Temperature
-                }),                     
-            success: function(res){                         
-            $('#form-response').html('<div class="alert alert-info" role="alert">Welcome to the queue! Your path will begin shortly...</div>');},                     
-            error: function(){
-             $('#form-response').html('<div class="alert alert-info" role="alert">Something went wrong... We are working on it!</div>');                     }}); }) });      
+                    type: "POST",                     
+                    url: 'https://ghx1pj3i44.execute-api.us-east-1.amazonaws.com/default',      
+                    data: JSON.stringify({
+                    "Tsc": Tsc,
+                    "Psc": Psc,
+                    "omega": omega,
+                    "Temperature": Temperature
+                    }),
+                    success: function(res){                         
+                         console.log(res);} ,                 
+                    error: function(){
+                        console.log("whaddup tho");
+                    }})})})
         </script>
 
 
